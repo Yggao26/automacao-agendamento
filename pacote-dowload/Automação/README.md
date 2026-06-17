@@ -34,7 +34,21 @@ npx prisma migrate dev --name init
 npm run dev
 ```
 
-5. Expor o servidor para a internet (ngrok) e configurar o webhook na Meta para `https://<seu-ngrok>/webhook`
+5. Rodar testes
+
+```bash
+npm run test
+```
+
+6. Gerar cobertura de testes
+
+```bash
+npm run test:coverage
+```
+
+7. Expor o servidor para a internet (ngrok) e configurar o webhook na Meta para `https://<seu-ngrok>/webhook`
+
+8. Seguir o guia detalhado de configuração da Meta e do WhatsApp em [META-WHATSAPP-GUIA.md](META-WHATSAPP-GUIA.md)
 
 Arquivos importantes:
 
@@ -59,3 +73,7 @@ Novas rotas API (exemplos):
 O endpoint de disponibilidade retorna `slots` no formato `YYYY-MM-DD HH:MM`.
 
 Observação sobre edição de horários: use os endpoints de `working-hours` para configurar dias e horários de funcionamento; para o barbeiro ter flexibilidade, a interface do dashboard deve chamar essas rotas para atualizar os períodos por dia da semana.
+
+## Configuração da Meta e WhatsApp
+
+Se você está começando do zero, siga o guia em [META-WHATSAPP-GUIA.md](META-WHATSAPP-GUIA.md). Ele explica o que fazer no painel da Meta, o que preencher no arquivo `.env` e quais comandos executar no VS Code.

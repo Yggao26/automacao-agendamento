@@ -2,16 +2,13 @@ import { Router, Request, Response } from "express";
 import { prisma } from "../prisma";
 import axios from "axios";
 import { getAvailableSlots } from "../utils/availability";
+import { formatLocalDateTime, parseLocalDateTime } from "../utils/datetime";
 
 const router = Router();
 const DEFAULT_SERVICE_DURATION = 40;
 
 function normalizeText(text: string) {
   return text.trim().toLowerCase();
-}
-
-function formatSlot(date: Date) {
-  return date.toISOString().slice(0, 16).replace("T", " ");
 }
 
 async function getDefaultService() {
@@ -179,9 +176,10 @@ router.post("/", async (req: Request, res: Response) => {
           if (state === "AWAITING_SERVICE") {
             const serviceId = Number(normalized);
             const service = isNaN(serviceId)
-              ? await prisma.service.findFirst({
-                  where: { name: { equals: text, mode: "insensitive" } },
-                })
+              ? (await prisma.service.findMany()).find(
+                  (currentService) =>
+                    normalizeText(currentService.name) === normalizeText(text),
+                )
               : await prisma.service.findUnique({ where: { id: serviceId } });
 
             if (!service) {
@@ -272,10 +270,18 @@ router.post("/", async (req: Request, res: Response) => {
               continue;
             }
 
-            const start = new Date(text.trim());
+            const start = parseLocalDateTime(text.trim());
+            if (!start) {
+              await sendWhatsAppMessage(
+                from,
+                "Formato inválido. Envie o horário como YYYY-MM-DD HH:MM.",
+              );
+              continue;
+            }
+
             const end = new Date(start.getTime() + service.duration * 60000);
             const slots = await getAvailableSlots(date, service.duration);
-            const wanted = text.trim();
+            const wanted = formatLocalDateTime(start);
 
             if (!slots.includes(wanted)) {
               await sendWhatsAppMessage(
@@ -306,7 +312,7 @@ router.post("/", async (req: Request, res: Response) => {
               });
               await sendWhatsAppMessage(
                 from,
-                `Agendamento confirmado para ${formatSlot(start)}. Obrigado!`,
+                `Agendamento confirmado para ${formatLocalDateTime(start)}. Obrigado!`,
               );
               await clearConversation(from);
             } catch (error) {
