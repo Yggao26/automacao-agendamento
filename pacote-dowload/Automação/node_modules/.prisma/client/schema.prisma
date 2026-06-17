@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Client {
+  id           Int           @id @default(autoincrement())
+  name         String
+  phone        String        @unique
+  appointments Appointment[]
+}
+
+model Service {
+  id           Int           @id @default(autoincrement())
+  name         String
+  duration     Int // duração em minutos
+  appointments Appointment[]
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+  serviceId Int?
+  start     DateTime
+  end       DateTime
+  status    String   @default("scheduled")
+}
+
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  state     String
+  data      String?
+  updatedAt DateTime @updatedAt
+}
+
+// Horários de funcionamento configuráveis (weekday: 1 = Segunda ... 7 = Domingo)
+model WorkingHours {
+  id      Int    @id @default(autoincrement())
+  weekday Int
+  start   String // formato "09:00"
+  end     String // formato "20:00"
+}
