@@ -1,0 +1,104 @@
+COLINHA - HOSPEDAGEM GRATUITA (RENDER) + TESTE REAL
+
+==================================================
+PARTE 1 - PREPARAR CÓDIGO LOCAL
+==================================================
+
+1) Abra o projeto no VS Code
+2) No terminal, entre na pasta do app:
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento\pacote-dowload\Automação"
+
+3) Valide build/testes:
+npm install
+npm run build
+npm run test
+
+4) Faça commit e push para GitHub (na raiz do repo):
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento"
+git add .
+git commit -m "Preparar deploy Render + fluxo teste real"
+git push
+
+==================================================
+PARTE 2 - SUBIR NO RENDER (GRATUITO)
+==================================================
+
+1) Acesse https://render.com e faça login (com GitHub)
+2) Clique em New + > Blueprint
+3) Selecione este repositório
+4) O Render vai ler automaticamente o arquivo render.yaml
+5) Clique em Apply
+
+==================================================
+PARTE 3 - CONFIGURAR VARIÁVEIS NO RENDER
+==================================================
+
+No serviço criado, vá em Environment e preencha:
+
+WEBHOOK_VERIFY_TOKEN=barber_verify_2026
+META_ACCESS_TOKEN=SEU_TOKEN_META_ATUAL
+META_PHONE_NUMBER_ID=SEU_PHONE_NUMBER_ID
+
+DATABASE_URL já vem no render.yaml (SQLite local do serviço)
+
+==================================================
+PARTE 4 - TESTAR URL DE PRODUÇÃO
+==================================================
+
+Quando o deploy terminar, copie a URL pública do Render:
+Exemplo: https://barber-bot-api.onrender.com
+
+Teste no navegador:
+https://barber-bot-api.onrender.com/health
+
+Resposta esperada:
+{"ok":true,"service":"barber-bot"}
+
+Painel admin online:
+https://barber-bot-api.onrender.com/admin
+
+==================================================
+PARTE 5 - LIGAR COM META (WEBHOOK REAL)
+==================================================
+
+No Meta Developers > Webhooks:
+
+Callback URL:
+https://SEU-SERVICO.onrender.com/webhook
+
+Verify token:
+barber_verify_2026
+
+Assinar campo:
+messages
+(opcional: message_status)
+
+==================================================
+PARTE 6 - TESTE REAL COM NÚMERO DE AMIGO (SEGURO)
+==================================================
+
+IMPORTANTE:
+- Use APENAS número que concordou com teste.
+- Use janela curta de teste.
+- Não interfere nas conversas pessoais dele fora do teste.
+
+Passos:
+1) Na Meta, adicione o número do amigo como destinatário de teste
+2) Envie template Hello World
+3) Peça para ele responder "Oi"
+4) Acompanhe no painel /admin e no endpoint de agenda
+
+API para validar agenda do dia:
+https://SEU-SERVICO.onrender.com/api/appointments?date=YYYY-MM-DD
+
+==================================================
+PARTE 7 - CHECKLIST DE DEMO PARA CLIENTE
+==================================================
+
+1) Mostrar /admin carregando em produção
+2) Mostrar criação/edição de serviço
+3) Mostrar criação/remoção de horário
+4) Simular agendamento (ou real no WhatsApp)
+5) Mostrar agenda atualizada em tempo real
+
+Fim.

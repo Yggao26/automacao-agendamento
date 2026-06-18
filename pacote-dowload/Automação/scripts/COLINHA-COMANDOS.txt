@@ -1,0 +1,75 @@
+COLINHA RÁPIDA - BARBER BOT (Windows + VS Code)
+
+PASTA DO PROJETO (SEMPRE)
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento\pacote-dowload\Automação"
+
+==================================================
+ROTINA COMPLETA (quando abrir o VS Code)
+==================================================
+
+1) Entrar na pasta
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento\pacote-dowload\Automação"
+
+2) Limpar processos antigos (evita erro de porta e trava do prisma)
+Get-Process -Name node,ngrok -ErrorAction SilentlyContinue | Stop-Process -Force
+
+3) Instalar dependências (só quando necessário)
+npm install
+
+4) Gerar Prisma Client
+npx prisma generate
+
+5) Aplicar migrations
+npx prisma migrate deploy
+
+6) Setup inicial do cliente (serviços e horários padrão)
+npm run setup:cliente
+
+7) Subir backend (deixar esse terminal aberto)
+npm run dev
+
+8) Abrir novo terminal (botão +) e subir ngrok
+ngrok http 3333
+
+9) Abrir painel no navegador
+http://localhost:3333/admin
+
+==================================================
+BLOCO ÚNICO (copiar e colar no 1º terminal)
+==================================================
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento\pacote-dowload\Automação"; Get-Process -Name node,ngrok -ErrorAction SilentlyContinue | Stop-Process -Force; npx prisma generate; npx prisma migrate deploy; npm run setup:cliente; npm run dev
+
+Depois, no 2º terminal:
+ngrok http 3333
+
+==================================================
+TESTE RÁPIDO SEM WHATSAPP REAL
+==================================================
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento\pacote-dowload\Automação"
+npm run simular:agendamento
+
+==================================================
+SE DER ERRO COMUM
+==================================================
+
+1) Erro EADDRINUSE (porta 3333 em uso)
+Get-NetTCPConnection -LocalPort 3333 -ErrorAction SilentlyContinue | Select-Object OwningProcess
+Stop-Process -Id NUMERO_DO_PROCESSO -Force
+
+2) Erro Prisma EPERM / DLL travada
+Get-Process -Name node,ngrok -ErrorAction SilentlyContinue | Stop-Process -Force
+Remove-Item -Recurse -Force "node_modules\.prisma\client" -ErrorAction SilentlyContinue
+npx prisma generate
+
+3) npm ENOENT package.json
+Você está na pasta errada. Rode:
+cd "c:\Users\Dell\Documents\GitHub\automacao-agendamento\pacote-dowload\Automação"
+
+==================================================
+PARA DEMONSTRAÇÃO
+==================================================
+1) Backend no ar (npm run dev)
+2) ngrok ativo (ngrok http 3333)
+3) Painel aberto (/admin)
+4) Rodar simulador (npm run simular:agendamento)
+5) Mostrar agenda sendo atualizada em tempo real

@@ -77,3 +77,26 @@ Observação sobre edição de horários: use os endpoints de `working-hours` pa
 ## Configuração da Meta e WhatsApp
 
 Se você está começando do zero, siga o guia em [META-WHATSAPP-GUIA.md](META-WHATSAPP-GUIA.md). Ele explica o que fazer no painel da Meta, o que preencher no arquivo `.env` e quais comandos executar no VS Code.
+
+## Caminho gratuito para começar
+
+Você consegue evoluir e demonstrar o projeto sem custo nesta fase:
+
+1. Ambiente local com Node + SQLite (gratuito).
+2. Exposição com ngrok free para validar webhooks.
+3. Painel admin local em `http://localhost:3333/admin`.
+4. Meta Developers em modo de teste.
+
+Quando for operar com clientes reais, você pode continuar com plano gratuito no início, mas o ideal é migrar para uma hospedagem estável com URL fixa.
+
+## Playbook por cliente (passo a passo curto)
+
+Use este fluxo para configurar cada novo cliente sem retrabalho:
+
+1. Rode `npm run setup:cliente` para criar serviços e horários padrão.
+2. Ajuste serviços e horários no painel admin (`/admin`).
+3. Configure token e webhook da Meta no `.env`.
+4. Teste fluxo de conversa via script `npm run simular:agendamento`.
+5. Valide agenda do dia em `GET /api/appointments?date=YYYY-MM-DD`.
+
+Com esse playbook, você consegue sair de zero para demonstração funcional em poucos minutos.

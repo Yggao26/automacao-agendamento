@@ -4,6 +4,11 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["src/**/*.test.ts"],
+    server: {
+      deps: {
+        inline: ["supertest"],
+      },
+    },
     coverage: {
       reporter: ["text", "html"],
     },
