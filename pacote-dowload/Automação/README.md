@@ -50,6 +50,16 @@ npm run test:coverage
 
 8. Seguir o guia detalhado de configuração da Meta e do WhatsApp em [META-WHATSAPP-GUIA.md](META-WHATSAPP-GUIA.md)
 
+## Deploy contínuo no Render
+
+O projeto já vem preparado para o Render com banco SQLite em disco persistente. Ao criar o serviço pelo `render.yaml`, o Render usa:
+
+- Build: `npm install && npm run build`
+- Migrações: `npm run db:deploy` antes do start
+- Banco: `file:/var/data/dev.db` em um disco persistente
+
+Depois do deploy, configure as variáveis secretas no painel do Render e aponte a Meta para `https://SEU-SERVICO.onrender.com/webhook`.
+
 Arquivos importantes:
 
 - [src/index.ts](src/index.ts) — servidor principal

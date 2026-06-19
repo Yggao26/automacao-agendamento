@@ -3,16 +3,21 @@ services:
     name: barber-bot-api
     env: node
     rootDir: pacote-dowload/Automação
-    plan: free
+    plan: starter
     autoDeploy: true
-    buildCommand: npm install && npm run build && npm run db:deploy
+    buildCommand: npm install && npm run build
+    preDeployCommand: npm run db:deploy
     startCommand: npm run start:prod
     healthCheckPath: /health
+    disk:
+      name: barber-bot-data
+      mountPath: /var/data
+      sizeGB: 1
     envVars:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
-        value: file:./prisma/dev.db
+        value: file:/var/data/dev.db
       - key: WEBHOOK_VERIFY_TOKEN
         sync: false
       - key: META_ACCESS_TOKEN
